@@ -106,7 +106,7 @@ const forms = (state) => {
                     clearModalState(state);
                     closeAllModals('[data-modal');
                     setTimeout(function() {
-                        // form.forEach(item => item.reset());
+                        form.forEach(item => item.reset());
                         statusMessage.remove();
                         item.style.display = 'block';
                         item.classList.remove('fadeOutUp');

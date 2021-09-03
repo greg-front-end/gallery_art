@@ -5508,9 +5508,8 @@ var changeModalState = function changeModalState(state) {
 
           default:
             break;
-        }
+        } // console.log(state);
 
-        console.log(state);
       });
     });
   }
@@ -5748,7 +5747,9 @@ var forms = function forms(state) {
         clearModalState(state);
         Object(_closeAllModal__WEBPACK_IMPORTED_MODULE_13__["default"])('[data-modal');
         setTimeout(function () {
-          // form.forEach(item => item.reset());
+          form.forEach(function (item) {
+            return item.reset();
+          });
           statusMessage.remove();
           item.style.display = 'block';
           item.classList.remove('fadeOutUp');
