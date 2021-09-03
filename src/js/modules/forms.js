@@ -1,5 +1,6 @@
 // import checkNumInputs from "./checkNumInputs";
 import closeAllModals from "./closeAllModal";
+import {postData} from "../services/requests";
 
 const forms = () => {
     const form = document.querySelectorAll('form'),
@@ -24,16 +25,6 @@ const forms = () => {
         question: 'assets/question.php'
     };
     
-    // create request to url, then show status on div(status), then if status 200 post data
-    const postData = async (url, data) => {
-        let res = await fetch(url, {
-            method: 'POST',
-            body: data
-        });
-
-        return await res.text();
-    };
-
     // clear all inputs after form sends
     const clearInputs = () => {
         inputs.forEach(item => {
