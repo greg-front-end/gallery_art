@@ -50,7 +50,7 @@ const forms = () => {
 
             let dots;
             const arr = item.files[0].name.split('.');
-            item.files[0].name.split('.')[0].length > 6 ? dots = '...' : dots = '.';
+            arr[0].length > 6 ? dots = '...' : dots = '.';
             const name = arr[0].substring(0, 6) + dots + arr[1];
             item.previousElementSibling.textContent = name;
         });
