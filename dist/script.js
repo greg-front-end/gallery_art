@@ -5402,6 +5402,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_mask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/mask */ "./src/js/modules/mask.js");
 /* harmony import */ var _modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/checkTextInputs */ "./src/js/modules/checkTextInputs.js");
 /* harmony import */ var _modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/showMoreStyles */ "./src/js/modules/showMoreStyles.js");
+/* harmony import */ var _modules_calc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/calc */ "./src/js/modules/calc.js");
+/* harmony import */ var _modules_changeModalState_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/changeModalState.js */ "./src/js/modules/changeModalState.js.js");
+
+
 
 
 
@@ -5411,15 +5415,114 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
+  var modalState = {};
+  Object(_modules_changeModalState_js__WEBPACK_IMPORTED_MODULE_7__["default"])(modalState);
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])();
   Object(_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])('.feedback-slider-item', 'horizontal', '.main-prev-btn', '.main-next-btn');
   Object(_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])('.main-slider-item', '.vertical');
-  Object(_modules_forms__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  Object(_modules_forms__WEBPACK_IMPORTED_MODULE_2__["default"])(modalState);
   Object(_modules_mask__WEBPACK_IMPORTED_MODULE_3__["default"])('[name="phone"]');
   Object(_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="name"]');
   Object(_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="message"]');
   Object(_modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__["default"])('.button-styles', '#styles .row');
+  Object(_modules_calc__WEBPACK_IMPORTED_MODULE_6__["default"])('#size', '#material', '#options', '.promocode', '.calc-price');
 });
+
+/***/ }),
+
+/***/ "./src/js/modules/calc.js":
+/*!********************************!*\
+  !*** ./src/js/modules/calc.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var calc = function calc(size, material, options, promocode, result) {
+  var sizeBlock = document.querySelector(size),
+      materialBlock = document.querySelector(material),
+      optionsBlock = document.querySelector(options),
+      promocodeBlock = document.querySelector(promocode),
+      resultBlock = document.querySelector(result);
+  var sum = 0;
+
+  var calcFunc = function calcFunc() {
+    sum = Math.round(+sizeBlock.value * +materialBlock.value + +optionsBlock.value);
+
+    if (sizeBlock.value === '' || materialBlock.value === '') {
+      resultBlock.textContent = 'Please, choose size and material';
+    } else if (promocodeBlock.value === 'IWANTPOPART') {
+      resultBlock.textContent = Math.round(sum * 0.7);
+    } else {
+      resultBlock.textContent = sum;
+    }
+  };
+
+  sizeBlock.addEventListener('change', calcFunc);
+  materialBlock.addEventListener('change', calcFunc);
+  optionsBlock.addEventListener('change', calcFunc);
+  promocodeBlock.addEventListener('input', calcFunc);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (calc);
+
+/***/ }),
+
+/***/ "./src/js/modules/changeModalState.js.js":
+/*!***********************************************!*\
+  !*** ./src/js/modules/changeModalState.js.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var changeModalState = function changeModalState(state) {
+  var sizePicture = document.querySelectorAll('#size'),
+      materialPicture = document.querySelectorAll('#material'),
+      optionsPicture = document.querySelectorAll('#options'),
+      promocode = document.querySelectorAll('.promocode'),
+      btn = document.querySelectorAll('.button-order'),
+      sum = document.querySelectorAll('.calc-price');
+
+  function bindActionToElems(event, elem, prop) {
+    elem.forEach(function (item, i) {
+      item.addEventListener(event, function () {
+        switch (item.nodeName) {
+          case 'SELECT':
+            state[prop] = item.value;
+            break;
+
+          case 'INPUT':
+            state[prop] = item.value;
+            break;
+
+          case 'BUTTON':
+            state[prop] = sum[0].textContent;
+            break;
+
+          default:
+            break;
+        }
+
+        console.log(state);
+      });
+    });
+  }
+
+  bindActionToElems('change', sizePicture, 'size');
+  bindActionToElems('change', materialPicture, 'material');
+  bindActionToElems('change', optionsPicture, 'options');
+  bindActionToElems('input', promocode, 'promocode');
+  bindActionToElems('click', btn, 'total');
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (changeModalState);
 
 /***/ }),
 
@@ -5535,7 +5638,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var forms = function forms() {
+var forms = function forms(state) {
   var form = document.querySelectorAll('form'),
       inputs = document.querySelectorAll('input'),
       upload = document.querySelectorAll('[name="upload"]'); // module for check inputs with value of number
@@ -5594,6 +5697,15 @@ var forms = function forms() {
       statusMessage.appendChild(textMessage); // if dataAttribute has prop(end) we append the key and value to formData
 
       var formData = new FormData(item);
+
+      if (item.getAttribute('data-calc') === 'calc') {
+        console.log(state);
+
+        for (var key in state) {
+          formData.append(key, state[key]);
+        }
+      }
+
       var api;
       item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
       console.log(api); // in the end step of the quiz clear modalState
@@ -5632,10 +5744,11 @@ var forms = function forms() {
         textMessage.textContent = message.failure;
         statusImg.setAttribute('src', message.fail);
       }).finally(function () {
-        clearInputs(); // clearModalState();
-
+        clearInputs();
+        clearModalState(state);
         Object(_closeAllModal__WEBPACK_IMPORTED_MODULE_13__["default"])('[data-modal');
         setTimeout(function () {
+          // form.forEach(item => item.reset());
           statusMessage.remove();
           item.style.display = 'block';
           item.classList.remove('fadeOutUp');

@@ -2,7 +2,7 @@
 import closeAllModals from "./closeAllModal";
 import {postData} from "../services/requests";
 
-const forms = () => {
+const forms = (state) => {
     const form = document.querySelectorAll('form'),
         inputs = document.querySelectorAll('input'),
         upload = document.querySelectorAll('[name="upload"]');
@@ -72,6 +72,12 @@ const forms = () => {
             
             // if dataAttribute has prop(end) we append the key and value to formData
             const formData = new FormData(item);
+            if (item.getAttribute('data-calc') === 'calc') {
+                console.log(state);
+                for (let key in state) {
+                    formData.append(key, state[key]);
+                }
+            }
             let api;
             
             item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question; 
@@ -96,9 +102,11 @@ const forms = () => {
                 })
                 .finally(() => {
                     clearInputs();
-                    // clearModalState();
+                    
+                    clearModalState(state);
                     closeAllModals('[data-modal');
                     setTimeout(function() {
+                        // form.forEach(item => item.reset());
                         statusMessage.remove();
                         item.style.display = 'block';
                         item.classList.remove('fadeOutUp');
