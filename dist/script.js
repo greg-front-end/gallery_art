@@ -5511,20 +5511,57 @@ __webpack_require__.r(__webpack_exports__);
 
 var accordion = function accordion(triggersSelector, itemsSelector) {
   var btns = document.querySelectorAll(triggersSelector),
-      blocks = document.querySelectorAll(itemsSelector);
-  blocks.forEach(function (block) {
-    block.classList.add('animated', 'fadeInDown');
-  });
-  btns.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      if (!this.classList.contains('active')) {
-        btns.forEach(function (btn) {
-          btn.classList.remove('active', 'active-style');
-        });
-        this.classList.add('active', 'active-style');
-      }
+      blocks = document.querySelectorAll(itemsSelector); // solution throw js
+
+  function hideContent() {
+    btns.forEach(function (btn) {
+      btn.classList.remove('active-style');
     });
-  });
+    blocks.forEach(function (block) {
+      block.classList.remove('active-content');
+      block.style.maxHeight = null;
+    });
+  }
+
+  function showContent(obj) {
+    var i = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+    hideContent();
+    btns[i].classList.add('active-style');
+    blocks[i].classList.add('active-content');
+    blocks[i].style.maxHeight = obj.scrollHeight + 80 + 'px';
+  }
+
+  btns.forEach(function (btn, i) {
+    btn.addEventListener('click', function () {
+      if (this.nextElementSibling.style.maxHeight) {
+        hideContent();
+      } else {
+        showContent(this.nextElementSibling, i);
+      }
+      /*if need open every tabs */
+      // this.classList.toggle('active-style');
+      // this.nextElementSibling.classList.toggle('active-content');
+      // if (this.classList.contains('active-style')) {
+      //     this.nextElementSibling.style.maxHeight = this.nextElementSibling.scrollHeight + 80 + 'px';
+      // } else {
+      //     this.nextElementSibling.style.maxHeight = '0px';
+      // }
+
+    });
+  }); // solution trhow css styles
+  // blocks.forEach(block => {
+  //     block.classList.add('animated','fadeInDown');
+  // });
+  // btns.forEach(btn => {
+  //     btn.addEventListener('click', function() {
+  //         if (!this.classList.contains('active')) {
+  //             btns.forEach(btn => {
+  //                 btn.classList.remove('active', 'active-style');
+  //             });
+  //             this.classList.add('active', 'active-style');
+  //         }
+  //     });
+  // });
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (accordion);
