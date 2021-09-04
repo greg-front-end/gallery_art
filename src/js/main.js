@@ -11,6 +11,7 @@ import pictureSize from "./modules/pictureSize";
 import accordion from "./modules/accordion";
 import burger from "./modules/burger";
 import scrollToAnchor from "./modules/scrollToAnchor";
+import drop from "./modules/drop";
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -32,4 +33,5 @@ window.addEventListener('DOMContentLoaded', () => {
     accordion('.accordion-heading', '.accordion-block');
     burger('.burger-menu', '.burger');
     scrollToAnchor('.pageup');
+    drop();
 });
