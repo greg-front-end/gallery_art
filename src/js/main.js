@@ -31,5 +31,5 @@ window.addEventListener('DOMContentLoaded', () => {
     pictureSize('.sizes-block');
     accordion('.accordion-heading', '.accordion-block');
     burger('.burger-menu', '.burger');
-    scrollToAnchor();
+    scrollToAnchor('.pageup');
 });
